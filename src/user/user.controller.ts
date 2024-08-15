@@ -6,8 +6,10 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -22,7 +24,7 @@ export class UserController {
   findOneUser(@Param('idOrEmail') idOrEmail: string) {
     return this.userService.findOne(idOrEmail);
   }
-
+  @UseGuards(AuthGuard)
   @Delete(':id')
   deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.userService.delete(id);
