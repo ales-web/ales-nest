@@ -18,11 +18,15 @@ export class UserService {
     });
   }
 
-  async findOne(idOrEmail) {
+  async findOneById(id: number) {
     return await this.prismaService.user.findFirst({
-      where: {
-        OR: [{ id: +idOrEmail }, { email: idOrEmail }],
-      },
+      where: { id },
+    });
+  }
+
+  async findOneByEmail(email: string) {
+    return await this.prismaService.user.findFirst({
+      where: { email },
     });
   }
 

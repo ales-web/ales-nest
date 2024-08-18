@@ -19,7 +19,7 @@ export class AuthService {
   ) {}
 
   async register(user: RegisterDto): Promise<User> {
-    const existingUser = await this.userService.findOne(user.email);
+    const existingUser = await this.userService.findOneByEmail(user.email);
     if (existingUser) throw new ConflictException('User already exists');
     const hashedPassword = this.hashPassword(user.password);
     user.password = hashedPassword;
@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   async logIn(email: string, password: string): Promise<TokenDto> {
-    const user = await this.userService.findOne(email);
+    const user = await this.userService.findOneByEmail(email);
     if (!compareSync(password, user.password)) {
       throw new UnauthorizedException();
     }
