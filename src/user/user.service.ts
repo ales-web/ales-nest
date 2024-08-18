@@ -2,32 +2,32 @@ import { Injectable, UseGuards } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '@prisma/prisma.service';
 import { genSalt, genSaltSync, hashSync } from 'bcrypt';
+import { use } from 'passport';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly PrismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  save(user: Partial<User>) {
+  async save(user: Partial<User>): Promise<User> {
     const hashedPassword = this.hashPassword(user.password);
-    return this.PrismaService.user.create({
+    return await this.prismaService.user.create({
       data: {
         email: user.email,
-        password: hashedPassword,
-        roles: ['USER'],
+        password: user.password,
       },
     });
   }
 
-  findOne(idOrEmail: string) {
-    return this.PrismaService.user.findFirst({
+  async findOne(idOrEmail) {
+    return await this.prismaService.user.findFirst({
       where: {
-        OR: [{ id: idOrEmail }, { email: idOrEmail }],
+        OR: [{ id: +idOrEmail }, { email: idOrEmail }],
       },
     });
   }
 
-  delete(id) {
-    return this.PrismaService.user.delete({
+  async delete(id: number): Promise<User> {
+    return await this.prismaService.user.delete({
       where: { id },
     });
   }

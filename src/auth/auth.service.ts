@@ -1,7 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { User } from '@prisma/client';
+import { PrismaService } from '@prisma/prisma.service';
 import { UserService } from '@user/user.service';
-import { compareSync } from 'bcrypt';
+import { compareSync, genSaltSync, hashSync } from 'bcrypt';
+import { TokenDto } from './dto/token.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -10,18 +18,39 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(
-    email: string,
-    password: string,
-  ): Promise<{ access_token: string }> {
+  async register(user: RegisterDto): Promise<User> {
+    const existingUser = await this.userService.findOne(user.email);
+    if (existingUser) throw new ConflictException('User already exists');
+    const hashedPassword = this.hashPassword(user.password);
+    user.password = hashedPassword;
+    return await this.userService.save(user);
+  }
+
+  async logIn(email: string, password: string): Promise<TokenDto> {
     const user = await this.userService.findOne(email);
     if (!compareSync(password, user.password)) {
       throw new UnauthorizedException();
     }
     const payload = { userId: user.id };
 
+    return this.issueNewToken(payload);
+  }
+
+  async logOut() {
+    return null;
+  }
+
+  private hashPassword(password: string) {
+    return hashSync(password, genSaltSync(10));
+  }
+
+  private async issueNewToken(payload: object) {
+    const accessToken = await this.jwtService.signAsync(payload);
+    const expDate = new Date();
+    expDate.setHours(expDate.getHours() + 1);
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: accessToken,
+      exp: expDate,
     };
   }
 }
