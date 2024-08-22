@@ -1,16 +1,15 @@
 import {
   ConflictException,
   Injectable,
+  InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
-import { PrismaService } from '@prisma/prisma.service';
 import { UserService } from '@user/user.service';
-import { compareSync, genSaltSync, hashSync } from 'bcrypt';
-import { TokenDto } from './dto/token.dto';
-import { RegisterDto } from './dto/register.dto';
-
+import { TokenDto, RegisterDto } from './dto';
+import { hash, verify } from 'argon2';
 @Injectable()
 export class AuthService {
   constructor(
@@ -20,37 +19,58 @@ export class AuthService {
 
   async register(user: RegisterDto): Promise<User> {
     const existingUser = await this.userService.findOneByEmail(user.email);
+
     if (existingUser) throw new ConflictException('User already exists');
-    const hashedPassword = this.hashPassword(user.password);
+
+    const hashedPassword = await this.hashPassword(user.password);
     user.password = hashedPassword;
     return await this.userService.save(user);
   }
 
   async logIn(email: string, password: string): Promise<TokenDto> {
     const user = await this.userService.findOneByEmail(email);
-    if (!compareSync(password, user.password)) {
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    if (!(await verify(user.password, password))) {
       throw new UnauthorizedException();
     }
     const payload = { userId: user.id };
 
-    return this.issueNewToken(payload);
+    return this.issueNewTokens(payload);
   }
 
   async logOut() {
     return null;
   }
 
-  private hashPassword(password: string) {
-    return hashSync(password, genSaltSync(10));
+  async refresh(token: string): Promise<TokenDto> {
+    try {
+      const isValid = await this.jwtService.verifyAsync(token);
+      if (!isValid) {
+        throw new UnauthorizedException();
+      }
+      const tokenData = await this.jwtService.decode(token);
+      return this.issueNewTokens({ userId: tokenData.userId });
+    } catch {
+      throw new UnauthorizedException();
+    }
   }
 
-  private async issueNewToken(payload: object) {
+  private async hashPassword(password: string) {
+    return await hash(password);
+  }
+
+  private async issueNewTokens(payload: object) {
     const accessToken = await this.jwtService.signAsync(payload);
-    const expDate = new Date();
-    expDate.setHours(expDate.getHours() + 1);
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      expiresIn: '90d',
+    });
+
     return {
-      access_token: accessToken,
-      exp: expDate,
+      accessToken,
+      refreshToken,
     };
   }
 }

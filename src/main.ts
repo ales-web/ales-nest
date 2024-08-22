@@ -9,6 +9,7 @@ async function bootstrap() {
     .setTitle('Ales-Nest')
     .setDescription('Ales nest-based api')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

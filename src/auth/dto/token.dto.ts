@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsJWT } from 'class-validator';
+import { IsJWT } from 'class-validator';
 
 export class TokenDto {
   @ApiProperty({
     type: String,
   })
   @IsJWT()
-  access_token: string;
+  accessToken: string;
   @ApiProperty({
-    type: Date,
+    type: String,
   })
-  @IsDate()
-  exp: Date;
+  @IsJWT()
+  refreshToken: string;
 }

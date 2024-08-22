@@ -1,25 +1,26 @@
 import {
   Body,
   Controller,
-  Get,
+  HttpCode,
   Post,
-  Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { RegisterDto } from './dto/register.dto';
 import { User } from '@prisma/client';
-import { TokenDto } from './dto/token.dto';
 import { UserDto } from '@user/dto/user.dto';
-
+import { RefreshDto, RegisterDto, TokenDto } from './dto';
+import { AuthGuard } from './auth.guard';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -27,11 +28,11 @@ export class AuthController {
 
   @ApiCreatedResponse({
     type: UserDto,
-    description: 'User created',
+    description: 'Registred successful',
   })
-  @UsePipes(new ValidationPipe())
-  @Post('register')
   @ApiConflictResponse({ description: 'User already exists' })
+  @UsePipes(ValidationPipe)
+  @Post('register')
   register(@Body() dto: RegisterDto): Promise<User> {
     return this.authService.register(dto);
   }
@@ -41,12 +42,26 @@ export class AuthController {
     description: 'Login successful',
   })
   @ApiNotFoundResponse({ description: 'User not found' })
-  @UsePipes(new ValidationPipe())
+  @UsePipes(ValidationPipe)
+  @HttpCode(200)
   @Post('login')
   login(@Body() dto: RegisterDto): Promise<TokenDto> {
     return this.authService.logIn(dto.email, dto.password);
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    type: TokenDto,
+    description: 'Refresh successful',
+  })
+  @ApiUnauthorizedResponse({ description: 'Invalid token' })
+  @UseGuards(AuthGuard)
+  @UsePipes(ValidationPipe)
+  @HttpCode(200)
+  @Post('refresh')
+  refresh(@Body() token: RefreshDto): Promise<TokenDto> {
+    return this.authService.refresh(token.refreshToken);
+  }
   // @Post('logout')
   // logOut(@Query() token) {
   //   this.authService.logOut();

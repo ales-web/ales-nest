@@ -1,15 +1,13 @@
-import { Injectable, UseGuards } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '@prisma/prisma.service';
-import { genSalt, genSaltSync, hashSync } from 'bcrypt';
-import { use } from 'passport';
+import { UserDto } from './dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async save(user: Partial<User>): Promise<User> {
-    const hashedPassword = this.hashPassword(user.password);
+  async save(user: Partial<User>): Promise<UserDto> {
     return await this.prismaService.user.create({
       data: {
         email: user.email,
@@ -18,25 +16,25 @@ export class UserService {
     });
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: number): Promise<UserDto> {
     return await this.prismaService.user.findFirst({
       where: { id },
     });
   }
 
-  async findOneByEmail(email: string) {
+  async findOneByEmail(email: string): Promise<UserDto> {
     return await this.prismaService.user.findFirst({
       where: { email },
     });
   }
 
-  async delete(id: number): Promise<User> {
+  async delete(id: number): Promise<UserDto> {
+    const existingUser = await this.findOneById(id);
+
+    if (!existingUser) throw new NotFoundException();
+
     return await this.prismaService.user.delete({
       where: { id },
     });
-  }
-
-  private hashPassword(password: string) {
-    return hashSync(password, genSaltSync(10));
   }
 }

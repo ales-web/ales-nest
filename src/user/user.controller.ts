@@ -1,36 +1,32 @@
 import {
-  Body,
   Controller,
   Delete,
   Get,
   NotFoundException,
   Param,
   ParseIntPipe,
-  ParseUUIDPipe,
-  Post,
-  Query,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '@auth/auth.guard';
 import {
+  ApiBearerAuth,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
 import { UserDto } from './dto/user.dto';
+
 @ApiTags('User')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @Post()
-  // createUser(@Body() dto) {
-  //   return this.userService.save(dto);
-  // }
   @ApiOkResponse({
     type: UserDto,
   })
@@ -41,9 +37,12 @@ export class UserController {
     name: 'email',
     type: String,
   })
+  @UsePipes(ValidationPipe)
   @Get('email/:email')
-  async findOneUser(@Param('email') email: string): Promise<UserDto> {
-    return await this.userService.findOneByEmail(email);
+  async findOneUserByEmail(@Param('email') email: string): Promise<UserDto> {
+    const user = await this.userService.findOneByEmail(email);
+    if (!user) throw new NotFoundException();
+    return user;
   }
 
   @ApiOkResponse({
@@ -60,7 +59,9 @@ export class UserController {
   async findOneUserById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<UserDto> {
-    return await this.userService.findOneById(id);
+    const user = await this.userService.findOneById(id);
+    if (!user) throw new NotFoundException();
+    return user;
   }
 
   @ApiOkResponse({
@@ -69,11 +70,8 @@ export class UserController {
   @ApiNotFoundResponse({
     description: 'User not found',
   })
-  @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<UserDto> {
-    const existingUser = await this.userService.findOneById(id);
-    if (!existingUser) throw new NotFoundException('User not found');
     return await this.userService.delete(id);
   }
 }
