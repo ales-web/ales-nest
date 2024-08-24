@@ -19,6 +19,37 @@ model User {
   password  String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  shops     Shop[]
 
   @@map("users")
+}
+
+model Shop {
+  id               Int       @id @default(autoincrement())
+  name             String
+  description      String
+  tags             ShopTag[]
+  logo             String    @default("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz0NrSPiJX6g97BHInfVmqIUwgNgACgvIx-Q&s")
+  mainProductsLogo String[]  @default(["https://cs5.livemaster.ru/storage/1d/de/6475bf290c8ffcf4e73802a794ra--ukrasheniya-kole-s-podveskoj-tigrovyj-glaz.jpg", "https://cs5.livemaster.ru/storage/4c/d1/0204ad5ecf751a8c90fec84dcbuj--podarki-k-prazdnikam-huyumbula.jpg", "https://cs1.livemaster.ru/storage/04/cb/618fda29cc642232c093b1e329o3--suveniry-i-podarki-neftyanik-1.jpg"]) @map("main_products_logo")
+  promo            Boolean
+  User             User      @relation(fields: [ownerId], references: [id])
+  ownerId          Int       @map("owner_id")
+  products         String[]
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updated_at       DateTime  @updatedAt @map("updated_at")
+
+  @@map("shops")
+}
+
+enum ShopTag {
+  ARTS
+  BAGS
+  TOYS
+  TEXTILE
+  DISHES
+  GIFTS
+  INSTRUMENTS
+  SUBCULTURE
+  ZOO
+  ACCESSORIES
 }

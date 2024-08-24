@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { options } from '@auth/config';
+import { ShopsModule } from './shops/shops.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { options } from '@auth/config';
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.registerAsync(options()),
+    ShopsModule,
   ],
   controllers: [],
   exports: [JwtModule],
