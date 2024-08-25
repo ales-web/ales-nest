@@ -37,7 +37,7 @@ export class CreateShopDto {
   logo: string;
 
   @ApiProperty()
-  @IsArray()
+  @IsString({ each: true })
   mainProductsLogo: string[];
 
   @ApiProperty({ default: false })
@@ -46,5 +46,6 @@ export class CreateShopDto {
 
   @ApiProperty()
   @IsArray()
+  @IsString({ each: true })
   products: string[];
 }

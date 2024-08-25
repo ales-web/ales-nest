@@ -8,6 +8,8 @@ import {
   Post,
   Req,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto, ReadShopDto, ReadShopsDto } from './dto';
@@ -29,6 +31,7 @@ export class ShopsController {
   @ApiCreatedResponse({
     type: ReadShopDto,
   })
+  @UsePipes(ValidationPipe)
   @Post('create')
   async create(
     @Body() body: CreateShopDto,
@@ -46,6 +49,7 @@ export class ShopsController {
     return shop;
   }
 
+  @UsePipes(ValidationPipe)
   @ApiOkResponse({ type: [ReadShopDto] })
   @Get()
   async getShops(): Promise<ReadShopsDto[]> {
