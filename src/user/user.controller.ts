@@ -34,24 +34,6 @@ export class UserController {
     description: 'User not found',
   })
   @ApiParam({
-    name: 'email',
-    type: String,
-  })
-  @UsePipes(ValidationPipe)
-  @Get('email/:email')
-  async findOneUserByEmail(@Param('email') email: string): Promise<UserDto> {
-    const user = await this.userService.findOneByEmail(email);
-    if (!user) throw new NotFoundException();
-    return user;
-  }
-
-  @ApiOkResponse({
-    type: UserDto,
-  })
-  @ApiNotFoundResponse({
-    description: 'User not found',
-  })
-  @ApiParam({
     name: 'id',
     type: Number,
   })
