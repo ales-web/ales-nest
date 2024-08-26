@@ -63,4 +63,20 @@ export class ShopsService {
       },
     });
   }
+
+  async getUserShops(userId: number): Promise<ReadShopsDto[]> {
+    return await this.prismaService.shop.findMany({
+      where: { ownerId: userId },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        tags: true,
+        logo: true,
+        mainProductsLogo: true,
+        promo: true,
+        products: true,
+      },
+    });
+  }
 }

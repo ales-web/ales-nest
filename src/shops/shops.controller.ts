@@ -21,12 +21,16 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@auth/auth.guard';
+import { UserService } from '@user/user.service';
 @UseGuards(AuthGuard)
 @ApiBearerAuth()
 @ApiTags('Shops')
 @Controller('shops')
 export class ShopsController {
-  constructor(private readonly shopsService: ShopsService) {}
+  constructor(
+    private readonly shopsService: ShopsService,
+    private userService: UserService,
+  ) {}
 
   @ApiCreatedResponse({
     type: ReadShopDto,
@@ -54,5 +58,17 @@ export class ShopsController {
   @Get()
   async getShops(): Promise<ReadShopsDto[]> {
     return await this.shopsService.getShops();
+  }
+
+  @ApiNotFoundResponse({ description: 'User not found' })
+  @ApiOkResponse({ type: [ReadShopsDto] })
+  @Get('user/:id')
+  async getUserShops(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ReadShopsDto[]> {
+    if (!(await this.userService.findOneById(id))) {
+      throw new NotFoundException();
+    }
+    return await this.shopsService.getUserShops(id);
   }
 }
