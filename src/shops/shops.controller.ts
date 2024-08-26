@@ -22,6 +22,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@auth/auth.guard';
 import { UserService } from '@user/user.service';
+import { Public } from 'src/decorators/public.decorator';
 @UseGuards(AuthGuard)
 @ApiBearerAuth()
 @ApiTags('Shops')
@@ -55,6 +56,7 @@ export class ShopsController {
 
   @UsePipes(ValidationPipe)
   @ApiOkResponse({ type: [ReadShopDto] })
+  @Public()
   @Get()
   async getShops(): Promise<ReadShopsDto[]> {
     return await this.shopsService.getShops();
