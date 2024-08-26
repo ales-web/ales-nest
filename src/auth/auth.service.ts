@@ -1,14 +1,13 @@
 import {
   ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { UserService } from '@user/user.service';
-import { TokenDto, RegisterDto } from './dto';
+import { TokenDto, RegisterDto, LoginDto } from './dto';
 import { hash, verify } from 'argon2';
 @Injectable()
 export class AuthService {
@@ -27,7 +26,7 @@ export class AuthService {
     return await this.userService.save(user);
   }
 
-  async logIn(email: string, password: string): Promise<TokenDto> {
+  async logIn(email: string, password: string): Promise<LoginDto> {
     const user = await this.userService.findOneByEmail(email);
     if (!user) {
       throw new NotFoundException();
@@ -38,7 +37,12 @@ export class AuthService {
     }
     const payload = { userId: user.id };
 
-    return this.issueNewTokens(payload);
+    return {
+      tokens: await this.issueNewTokens(payload),
+      email: user.email,
+      roles: user.roles,
+      avatar: user.avatar,
+    };
   }
 
   async logOut() {

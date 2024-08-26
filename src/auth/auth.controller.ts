@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { UserDto } from '@user/dto/user.dto';
-import { RefreshDto, RegisterDto, TokenDto } from './dto';
+import { LoginDto, RefreshDto, RegisterDto, TokenDto } from './dto';
 import { AuthGuard } from './auth.guard';
 @ApiTags('Auth')
 @Controller('auth')
@@ -38,14 +38,14 @@ export class AuthController {
   }
 
   @ApiOkResponse({
-    type: TokenDto,
+    type: LoginDto,
     description: 'Login successful',
   })
   @ApiNotFoundResponse({ description: 'User not found' })
   @UsePipes(ValidationPipe)
   @HttpCode(200)
   @Post('login')
-  login(@Body() dto: RegisterDto): Promise<TokenDto> {
+  login(@Body() dto: RegisterDto): Promise<LoginDto> {
     return this.authService.logIn(dto.email, dto.password);
   }
 

@@ -1,5 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsEmail, IsInt, IsString } from 'class-validator';
+import { Roles } from '@prisma/client';
+import {
+  IsArray,
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsInt,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 
 export class UserDto {
   @ApiProperty({
@@ -28,4 +37,13 @@ export class UserDto {
   })
   @IsDate()
   updatedAt: Date;
+
+  @ApiProperty()
+  @IsString()
+  @IsUrl()
+  avatar: string;
+
+  @IsEnum(Roles, { each: true })
+  @IsArray()
+  roles: Roles[];
 }
