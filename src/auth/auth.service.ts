@@ -38,9 +38,9 @@ export class AuthService {
     const payload = { userId: user.id };
 
     return {
-      tokens: await this.issueNewTokens(payload),
+      ...(await this.issueNewTokens(payload)),
       email: user.email,
-      roles: user.roles,
+      role: user.role,
       avatar: user.avatar,
     };
   }

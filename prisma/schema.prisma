@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Roles {
+enum Role {
   USER
   ADMIN
 }
@@ -26,7 +26,7 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
   shops     Shop[]
   avatar    String?
-  roles     Roles[]  @default([USER])
+  role      Role     @default(USER)
 
   @@map("users")
 }
