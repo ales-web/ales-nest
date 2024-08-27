@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   Post,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -19,7 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { UserDto } from '@user/dto/user.dto';
-import { LoginDto, RefreshDto, RegisterDto, TokenDto } from './dto';
+import { LoginDto, RegisterDto, TokenDto } from './dto';
 import { AuthGuard } from './auth.guard';
 @ApiTags('Auth')
 @Controller('auth')
@@ -59,8 +60,9 @@ export class AuthController {
   @UsePipes(ValidationPipe)
   @HttpCode(200)
   @Post('refresh')
-  refresh(@Body() token: RefreshDto): Promise<TokenDto> {
-    return this.authService.refresh(token.refreshToken);
+  async refresh(@Req() request: Request): Promise<TokenDto> {
+    const token = request.headers['authorization'].split(' ')[1];
+    return this.authService.refresh(token);
   }
   // @Post('logout')
   // logOut(@Query() token) {
