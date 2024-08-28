@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { options } from '@auth/config';
 import { ShopsModule } from './shops/shops.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ShopsModule } from './shops/shops.module';
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.registerAsync(options()),
     ShopsModule,
+    ProfileModule,
   ],
   controllers: [],
   exports: [JwtModule],

@@ -53,10 +53,10 @@ export class AuthService {
   async refresh(token: string): Promise<TokenDto> {
     try {
       const isValid = await this.jwtService.verifyAsync(token);
-      if (!isValid) {
+      const tokenData = await this.jwtService.decode(token);
+      if (!isValid || tokenData.type !== 'refresh') {
         throw new UnauthorizedException();
       }
-      const tokenData = await this.jwtService.decode(token);
       return this.issueNewTokens({ userId: tokenData.userId });
     } catch {
       throw new UnauthorizedException();
@@ -68,10 +68,16 @@ export class AuthService {
   }
 
   private async issueNewTokens(payload: object) {
-    const accessToken = await this.jwtService.signAsync(payload);
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '90d',
+    const accessToken = await this.jwtService.signAsync({
+      ...payload,
+      type: 'access',
     });
+    const refreshToken = await this.jwtService.signAsync(
+      { ...payload, type: 'refresh' },
+      {
+        expiresIn: '90d',
+      },
+    );
 
     return {
       accessToken,

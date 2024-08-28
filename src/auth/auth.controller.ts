@@ -55,7 +55,6 @@ export class AuthController {
     description: 'Refresh successful',
   })
   @ApiUnauthorizedResponse({ description: 'Invalid token' })
-  @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
   @HttpCode(200)
   @Post('refresh')
