@@ -35,7 +35,7 @@ export class UserController {
     name: 'id',
     type: Number,
   })
-  @Get('id/:id')
+  @Get(':id')
   async findOneUserById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<UserDto> {

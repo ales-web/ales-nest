@@ -39,6 +39,7 @@ export class AuthService {
 
     return {
       ...(await this.issueNewTokens(payload)),
+      id: user.id,
       email: user.email,
       role: user.role,
       avatar: user.avatar,

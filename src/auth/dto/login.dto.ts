@@ -1,7 +1,7 @@
 import {
-  IsArray,
   IsEmail,
   IsEnum,
+  IsInt,
   IsJWT,
   IsString,
   IsUrl,
@@ -15,11 +15,17 @@ export class LoginDto {
   })
   @IsJWT()
   accessToken: string;
+
   @ApiProperty({
     type: String,
   })
   @IsJWT()
   refreshToken: string;
+
+  @ApiProperty()
+  @IsInt()
+  id: number;
+
   @ApiProperty()
   @IsString()
   @IsEmail()
