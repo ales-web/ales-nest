@@ -3,13 +3,11 @@ import {
   Controller,
   HttpCode,
   Post,
-  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
-  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
@@ -20,7 +18,6 @@ import {
 import { User } from '@prisma/client';
 import { UserDto } from '@user/dto/user.dto';
 import { LoginDto, RefreshDto, RegisterDto, TokenDto } from './dto';
-import { AuthGuard } from './auth.guard';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -49,7 +46,6 @@ export class AuthController {
     return this.authService.logIn(dto.email, dto.password);
   }
 
-  @ApiBearerAuth()
   @ApiOkResponse({
     type: TokenDto,
     description: 'Refresh successful',

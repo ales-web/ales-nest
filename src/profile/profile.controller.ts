@@ -1,6 +1,8 @@
 import {
+  Body,
   Controller,
   Get,
+  Patch,
   Req,
   UseGuards,
   UsePipes,
@@ -9,6 +11,7 @@ import {
 import { ProfileService } from './profile.service';
 import { AuthGuard } from '@auth/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UpdateUserDto } from '@user/dto/update-user.dto';
 
 @ApiTags('Profile')
 @ApiBearerAuth()
@@ -22,5 +25,12 @@ export class ProfileController {
   async getProfile(@Req() request: Request) {
     const userId = request['userId'];
     return await this.profileService.getProfile(userId);
+  }
+
+  @UsePipes(ValidationPipe)
+  @Patch()
+  async updateProfile(@Req() request: Request, @Body() data: UpdateUserDto) {
+    const userId = request['userId'];
+    return await this.profileService.updateProfile(userId, data);
   }
 }
