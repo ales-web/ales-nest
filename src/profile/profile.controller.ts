@@ -10,8 +10,14 @@ import {
 } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { AuthGuard } from '@auth/auth.guard';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UpdateUserDto } from '@user/dto/update-user.dto';
+import { ProfileDto } from './dto';
 
 @ApiTags('Profile')
 @ApiBearerAuth()
@@ -21,6 +27,7 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @ApiOperation({ summary: 'Get profile' })
+  @ApiOkResponse({ type: ProfileDto })
   @UsePipes(ValidationPipe)
   @Get()
   async getProfile(@Req() request: Request) {
@@ -29,9 +36,13 @@ export class ProfileController {
   }
 
   @ApiOperation({ summary: 'Update profile' })
+  @ApiOkResponse({ type: ProfileDto })
   @UsePipes(ValidationPipe)
   @Put()
-  async updateProfile(@Req() request: Request, @Body() data: UpdateUserDto) {
+  async updateProfile(
+    @Req() request: Request,
+    @Body() data: UpdateUserDto,
+  ): Promise<ProfileDto> {
     const userId = request['userId'];
     return await this.profileService.updateProfile(userId, data);
   }

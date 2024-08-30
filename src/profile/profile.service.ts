@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { UserService } from '@user/user.service';
+import { ProfileDto } from './dto';
 
 @Injectable()
 export class ProfileService {
@@ -8,11 +9,11 @@ export class ProfileService {
     private userService: UserService,
     private prismaService: PrismaService,
   ) {}
-  async getProfile(id: number) {
-    return this.userService.findOneById(id);
+  async getProfile(id: number): Promise<ProfileDto> {
+    return await this.userService.findOneById(id);
   }
 
-  async updateProfile(userId: number, data) {
+  async updateProfile(userId: number, data): Promise<ProfileDto> {
     return await this.userService.update(userId, data);
   }
 }
