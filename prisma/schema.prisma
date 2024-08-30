@@ -41,7 +41,7 @@ model Shop {
   promo            Boolean
   owner            User      @relation(fields: [ownerId], references: [id])
   ownerId          Int       @map("owner_id")
-  products         String[]
+  products         Product[]
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
 
@@ -59,4 +59,27 @@ enum ShopTag {
   SUBCULTURE
   ZOO
   ACCESSORIES
+}
+
+model Product {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String
+  images      String[]
+  tags        ProductTag[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  shop        Shop         @relation(fields: [shopId], references: [id])
+  shopId      Int
+
+  @@map("products")
+}
+
+enum ProductTag {
+  HANDMADE
+  ECO
+  LEATHER
+  FUR
+  IRON
+  CERAMIC
 }

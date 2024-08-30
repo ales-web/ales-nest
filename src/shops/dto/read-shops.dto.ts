@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ShopTag } from '@prisma/client';
+import { Product, ShopTag } from '@prisma/client';
 import { IsArray, IsBoolean, IsEnum, IsString } from 'class-validator';
 
 export class ReadShopsDto {
@@ -33,5 +33,5 @@ export class ReadShopsDto {
 
   @ApiProperty()
   @IsArray()
-  products: string[];
+  products: Product[];
 }

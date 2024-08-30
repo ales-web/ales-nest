@@ -12,6 +12,7 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -23,6 +24,7 @@ import { LoginDto, RefreshDto, RegisterDto, TokenDto } from './dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOperation({ summary: 'Register new user' })
   @ApiCreatedResponse({
     type: UserDto,
     description: 'Registred successful',
@@ -34,6 +36,7 @@ export class AuthController {
     return this.authService.register(dto);
   }
 
+  @ApiOperation({ summary: 'Login existing user' })
   @ApiOkResponse({
     type: LoginDto,
     description: 'Login successful',
@@ -46,6 +49,7 @@ export class AuthController {
     return this.authService.logIn(dto.email, dto.password);
   }
 
+  @ApiOperation({ summary: 'Get new token' })
   @ApiOkResponse({
     type: TokenDto,
     description: 'Refresh successful',

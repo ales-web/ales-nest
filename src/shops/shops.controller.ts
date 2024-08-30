@@ -18,6 +18,7 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@auth/auth.guard';
@@ -33,11 +34,12 @@ export class ShopsController {
     private userService: UserService,
   ) {}
 
+  @ApiOperation({ summary: 'Create shop' })
   @ApiCreatedResponse({
     type: ReadShopDto,
   })
   @UsePipes(ValidationPipe)
-  @Post('create')
+  @Post()
   async create(
     @Body() body: CreateShopDto,
     @Req() request: Request,
@@ -45,6 +47,7 @@ export class ShopsController {
     return await this.shopsService.createShop(request['userId'], body);
   }
 
+  @ApiOperation({ summary: 'Get shop' })
   @ApiOkResponse({ type: ReadShopDto })
   @ApiNotFoundResponse({ description: 'Shop not found' })
   @Get(':id')
@@ -54,6 +57,7 @@ export class ShopsController {
     return shop;
   }
 
+  @ApiOperation({ summary: 'Get shops' })
   @UsePipes(ValidationPipe)
   @ApiOkResponse({ type: [ReadShopDto] })
   @Public()
@@ -62,6 +66,7 @@ export class ShopsController {
     return await this.shopsService.getShops();
   }
 
+  @ApiOperation({ summary: 'Get users shops' })
   @ApiNotFoundResponse({ description: 'User not found' })
   @ApiOkResponse({ type: [ReadShopsDto] })
   @Get('user/:id')

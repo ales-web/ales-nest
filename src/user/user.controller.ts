@@ -13,6 +13,7 @@ import {
   ApiBearerAuth,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
@@ -25,6 +26,7 @@ import { UserDto } from './dto/user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiOperation({ summary: 'Get user' })
   @ApiOkResponse({
     type: UserDto,
   })
@@ -44,6 +46,7 @@ export class UserController {
     return user;
   }
 
+  @ApiOperation({ summary: 'Delete user' })
   @ApiOkResponse({
     type: UserDto,
   })
