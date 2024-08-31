@@ -66,7 +66,7 @@ export class ShopsController {
     return await this.shopsService.getShops();
   }
 
-  @ApiOperation({ summary: 'Get users shops' })
+  @ApiOperation({ summary: 'Get user shops' })
   @ApiNotFoundResponse({ description: 'User not found' })
   @ApiOkResponse({ type: [ReadShopsDto] })
   @Get('user/:id')

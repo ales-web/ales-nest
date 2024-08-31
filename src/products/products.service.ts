@@ -48,4 +48,10 @@ export class ProductsService {
       data,
     });
   }
+
+  async getShopProducts(id: number) {
+    return await this.prismaService.product.findMany({
+      where: { shopId: id },
+    });
+  }
 }

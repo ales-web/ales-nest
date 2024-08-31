@@ -76,4 +76,13 @@ export class ProductsController {
   ): Promise<ReadProductDto> {
     return this.productsService.deleteProduct(id);
   }
+
+  @ApiOperation({ summary: 'Get shop products' })
+  @ApiOkResponse({ type: ReadProductDto, isArray: true })
+  @Get('shop/:id')
+  async getShopProducts(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ReadProductDto[]> {
+    return await this.productsService.getShopProducts(id);
+  }
 }
