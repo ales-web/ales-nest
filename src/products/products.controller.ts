@@ -11,7 +11,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto';
+import { UpdateProductDto } from './dto';
 import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
@@ -34,7 +34,7 @@ export class ProductsController {
   @ApiNotFoundResponse({ description: 'Shop not found' })
   @UsePipes(ValidationPipe)
   @Post()
-  async createProduct(@Body() body: CreateProductDto): Promise<ReadProductDto> {
+  async createProduct(@Body() body: UpdateProductDto): Promise<ReadProductDto> {
     return this.productsService.createProduct(body);
   }
 
@@ -62,7 +62,7 @@ export class ProductsController {
   @Put(':id')
   async editProduct(
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: CreateProductDto,
+    @Body() body: UpdateProductDto,
   ): Promise<ReadProductDto> {
     return await this.productsService.updateProduct(id, body);
   }

@@ -9,7 +9,7 @@ import {
   IsUrl,
 } from 'class-validator';
 
-export class UserDto {
+export class ReadUserDto {
   @ApiProperty({
     type: Number,
   })
@@ -21,11 +21,7 @@ export class UserDto {
   @IsString()
   @IsEmail()
   email: string;
-  @ApiProperty({
-    type: String,
-  })
-  @IsString()
-  password: string;
+
   @ApiProperty({
     type: Date,
   })
@@ -42,6 +38,7 @@ export class UserDto {
   @IsUrl()
   avatar: string;
 
+  @ApiProperty({ enum: Role })
   @IsEnum(Role)
   role: Role;
 }

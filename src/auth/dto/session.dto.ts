@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsJWT } from 'class-validator';
-import { ProfileDto } from 'src/profile/dto';
+import { ReadProfileDto } from 'src/profile/dto';
 
 export class SessionDto {
   @ApiProperty()
@@ -12,5 +12,5 @@ export class SessionDto {
   refreshToken: string;
 
   @ApiProperty()
-  profile: ProfileDto;
+  profile: ReadProfileDto;
 }

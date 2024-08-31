@@ -5,15 +5,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
-import { UserService } from '@user/user.service';
-import { TokenDto, RegisterDto, LoginDto, SessionDto } from './dto';
+import { UsersService } from 'src/users/users.service';
+import { RegisterDto, SessionDto } from './dto';
 import { hash, verify } from 'argon2';
 import { ProfileService } from 'src/profile/profile.service';
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    private userService: UsersService,
     private jwtService: JwtService,
     private profileService: ProfileService,
   ) {}
@@ -46,10 +45,6 @@ export class AuthService {
       ...(await this.issueNewTokens(payload)),
       profile,
     };
-  }
-
-  async logOut() {
-    return null;
   }
 
   async refresh(token: string): Promise<SessionDto> {

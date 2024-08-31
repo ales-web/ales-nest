@@ -3,24 +3,22 @@ import { Role } from '@prisma/client';
 import { IsEmail, IsEnum, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class UpdateUserDto {
-  @ApiProperty({ type: String, required: false })
-  @IsOptional()
+  @ApiProperty({ type: String })
   @IsString()
   @IsEmail()
-  email?: string;
+  email: string;
 
-  @ApiProperty({ type: String, required: false })
-  @IsOptional()
+  @ApiProperty({ type: String })
   @IsString()
-  password?: string;
+  password: string;
 
-  @ApiProperty({ type: String, required: false })
-  @IsOptional()
+  @ApiProperty({ type: String })
   @IsString()
+  @IsOptional()
   @IsUrl()
   avatar?: string;
 
-  @ApiProperty({ enum: Role, required: false })
+  @ApiProperty({ enum: Role })
   @IsOptional()
   @IsEnum(Role)
   role?: Role;

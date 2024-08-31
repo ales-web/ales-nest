@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ProductTag } from '@prisma/client';
 import { IsArray, IsEnum, IsInt, IsString } from 'class-validator';
 
-export class CreateProductDto {
+export class UpdateProductDto {
   @ApiProperty()
   @IsString()
   name: string;

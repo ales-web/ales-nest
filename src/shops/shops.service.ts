@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
-import { CreateShopDto, ReadShopDto, ReadShopsDto } from './dto';
+import { UpdateShopDto, ReadShopDto, ReadShopsDto } from './dto';
 
 @Injectable()
 export class ShopsService {
@@ -40,7 +40,7 @@ export class ShopsService {
     });
   }
 
-  async createShop(userId: number, data: CreateShopDto): Promise<ReadShopDto> {
+  async createShop(userId: number, data: UpdateShopDto): Promise<ReadShopDto> {
     return await this.prismaService.shop.create({
       data: {
         ...data,

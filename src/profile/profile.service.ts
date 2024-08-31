@@ -1,19 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@prisma/prisma.service';
-import { UserService } from '@user/user.service';
-import { ProfileDto } from './dto';
+import { UsersService } from 'src/users/users.service';
+import { ReadProfileDto } from './dto';
 
 @Injectable()
 export class ProfileService {
-  constructor(
-    private userService: UserService,
-    private prismaService: PrismaService,
-  ) {}
-  async getProfile(id: number): Promise<ProfileDto> {
+  constructor(private userService: UsersService) {}
+  async getProfile(id: number): Promise<ReadProfileDto> {
     return await this.userService.findOneById(id);
   }
 
-  async updateProfile(userId: number, data): Promise<ProfileDto> {
+  async updateProfile(userId: number, data): Promise<ReadProfileDto> {
     return await this.userService.update(userId, data);
   }
 }

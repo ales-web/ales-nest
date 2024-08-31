@@ -16,9 +16,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
-import { UserDto } from '@user/dto/user.dto';
-import { LoginDto, RefreshDto, RegisterDto, SessionDto, TokenDto } from './dto';
+import { RefreshDto, RegisterDto, SessionDto } from './dto';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -61,8 +59,4 @@ export class AuthController {
   refresh(@Body() token: RefreshDto): Promise<SessionDto> {
     return this.authService.refresh(token.refreshToken);
   }
-  // @Post('logout')
-  // logOut(@Query() token) {
-  //   this.authService.logOut();
-  // }
 }

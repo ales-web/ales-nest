@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 import { IsDate, IsEmail, IsEnum, IsInt, IsUrl } from 'class-validator';
 
-export class ProfileDto {
+export class ReadProfileDto {
   @ApiProperty()
   @IsInt()
   id: number;
@@ -27,21 +27,3 @@ export class ProfileDto {
   @IsDate()
   updatedAt: Date;
 }
-
-// export type Profile = {
-//   id: number;
-//   name: string;
-//   email: string;
-//   role: Role;
-
-//   avatar?: string | null;
-
-//   createdAt: Date;
-//   updatedAt: Date;
-// };
-
-// export interface Session {
-//   accessToken: string;
-//   refreshToken: string;
-//   profile: Profile;
-// }

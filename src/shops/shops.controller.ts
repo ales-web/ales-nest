@@ -12,7 +12,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ShopsService } from './shops.service';
-import { CreateShopDto, ReadShopDto, ReadShopsDto } from './dto';
+import { UpdateShopDto, ReadShopDto, ReadShopsDto } from './dto';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -22,7 +22,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@auth/auth.guard';
-import { UserService } from '@user/user.service';
+import { UsersService } from 'src/users/users.service';
 import { Public } from 'src/decorators/public.decorator';
 @UseGuards(AuthGuard)
 @ApiBearerAuth()
@@ -31,7 +31,7 @@ import { Public } from 'src/decorators/public.decorator';
 export class ShopsController {
   constructor(
     private readonly shopsService: ShopsService,
-    private userService: UserService,
+    private userService: UsersService,
   ) {}
 
   @ApiOperation({ summary: 'Create shop' })
@@ -41,7 +41,7 @@ export class ShopsController {
   @UsePipes(ValidationPipe)
   @Post()
   async create(
-    @Body() body: CreateShopDto,
+    @Body() body: UpdateShopDto,
     @Req() request: Request,
   ): Promise<ReadShopDto> {
     return await this.shopsService.createShop(request['userId'], body);

@@ -25,10 +25,10 @@
         "src/prisma/*"
       ],
       "@user": [
-        "src/user"
+        "src/users"
       ],
       "@user/*": [
-        "src/user/*"
+        "src/users/*"
       ],
       "@auth": [
         "src/auth"

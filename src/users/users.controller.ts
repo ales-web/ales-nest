@@ -7,7 +7,7 @@ import {
   ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 import { AuthGuard } from '@auth/auth.guard';
 import {
   ApiBearerAuth,
@@ -17,18 +17,18 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserDto } from './dto/user.dto';
+import { ReadUserDto } from './dto/read-user.dto';
 
-@ApiTags('User')
+@ApiTags('Users')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
-@Controller('user')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+@Controller('users')
+export class UsersController {
+  constructor(private readonly userService: UsersService) {}
 
   @ApiOperation({ summary: 'Get user' })
   @ApiOkResponse({
-    type: UserDto,
+    type: ReadUserDto,
   })
   @ApiNotFoundResponse({
     description: 'User not found',
@@ -40,21 +40,29 @@ export class UserController {
   @Get(':id')
   async findOneUserById(
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<UserDto> {
+  ): Promise<ReadUserDto> {
     const user = await this.userService.findOneById(id);
+
     if (!user) throw new NotFoundException();
+
     return user;
   }
 
   @ApiOperation({ summary: 'Delete user' })
   @ApiOkResponse({
-    type: UserDto,
+    type: ReadUserDto,
   })
   @ApiNotFoundResponse({
     description: 'User not found',
   })
   @Delete(':id')
-  async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<UserDto> {
+  async deleteUser(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ReadUserDto> {
+    const user = await this.userService.findOneById(id);
+
+    if (!user) throw new NotFoundException();
+
     return await this.userService.delete(id);
   }
 }

@@ -1,21 +1,8 @@
 import { IsArray, IsBoolean, IsEnum, IsString } from 'class-validator';
-import { Product, ShopTag } from '@prisma/client';
+import { ShopTag } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
-// enum ShopTag {
-//   ARTS,
-//   BAGS,
-//   TOYS,
-//   TEXTILE,
-//   DISHES,
-//   GIFTS,
-//   INSTRUMENTS,
-//   SUBCULTURE,
-//   ZOO,
-//   ACCESSORIES,
-// }
-
-export class CreateShopDto {
+export class UpdateShopDto {
   @ApiProperty()
   @IsString()
   name: string;
@@ -43,9 +30,4 @@ export class CreateShopDto {
   @ApiProperty({ default: false })
   @IsBoolean()
   promo: boolean;
-
-  // @ApiProperty()
-  // @IsArray()
-  // @IsString({ each: true })
-  // products: Product[];
 }

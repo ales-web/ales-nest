@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
-import { CreateProductDto } from './dto';
+import { UpdateProductDto } from './dto';
 import { ShopsService } from 'src/shops/shops.service';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class ProductsService {
     private shopsService: ShopsService,
   ) {}
 
-  async createProduct(data: CreateProductDto) {
+  async createProduct(data: UpdateProductDto) {
     const shop = await this.shopsService.getShop(data.shopId);
     if (!shop) throw new NotFoundException();
     return await this.prismaService.product.create({
@@ -39,7 +39,7 @@ export class ProductsService {
     });
   }
 
-  async updateProduct(id: number, data: CreateProductDto) {
+  async updateProduct(id: number, data: UpdateProductDto) {
     const product = await this.getProduct(id);
     if (!product) throw new NotFoundException();
 
