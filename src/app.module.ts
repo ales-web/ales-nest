@@ -8,6 +8,7 @@ import { options } from '@auth/config';
 import { ShopsModule } from './shops/shops.module';
 import { ProfileModule } from './profile/profile.module';
 import { ProductsModule } from './products/products.module';
+import { ImagesModule } from './images/images.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ProductsModule } from './products/products.module';
     ShopsModule,
     ProfileModule,
     ProductsModule,
+    ImagesModule,
   ],
   controllers: [],
   exports: [JwtModule],
