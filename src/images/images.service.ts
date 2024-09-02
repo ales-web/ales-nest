@@ -52,13 +52,13 @@ export class ImagesService {
 
     for (let i = 0; i < files.length; i++) {
       const original = await sharp(files[i].buffer)
-        .png({ compressionLevel: 0 })
+        .jpeg({ quality: 100 })
         .toBuffer({ resolveWithObject: true });
       const medium = await sharp(files[i].buffer)
-        .png({ compressionLevel: 4 })
+        .jpeg({ quality: 50 })
         .toBuffer({ resolveWithObject: true });
       const small = await sharp(files[i].buffer)
-        .png({ compressionLevel: 9 })
+        .jpeg({ quality: 25 })
         .toBuffer({ resolveWithObject: true });
 
       resized.push({
