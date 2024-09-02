@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Product, ShopTag } from '@prisma/client';
+import { ReadUserDto } from '@user/dto';
 import {
   IsArray,
   IsBoolean,
@@ -44,7 +45,7 @@ export class ReadShopDto {
 
   @ApiProperty()
   @IsObject()
-  owner: object;
+  owner: ReadUserDto;
 
   @ApiProperty()
   @IsDate()

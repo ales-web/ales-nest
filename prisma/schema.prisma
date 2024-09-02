@@ -44,6 +44,7 @@ model Shop {
   owner            User      @relation(fields: [ownerId], references: [id])
   ownerId          Int       @map("owner_id")
   products         Product[]
+  rating           Float     @default(0)
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
 
@@ -64,14 +65,20 @@ enum ShopTag {
 }
 
 model Product {
-  id          Int          @id @default(autoincrement())
+  id          Int                 @id @default(autoincrement())
   name        String
+  price       Float               @default(0)
   description String
   images      String[]
   tags        ProductTag[]
-  createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime     @updatedAt @map("updated_at")
-  shop        Shop         @relation(fields: [shopId], references: [id])
+  materials   ProductMaterials[]
+  colors      ProductColors[]
+  categories  ProductCategories[]
+  size        Int                 @default(0)
+  OnStock     Int                 @default(1) @map("on_stock")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+  shop        Shop                @relation(fields: [shopId], references: [id])
   shopId      Int
 
   @@map("products")
@@ -84,4 +91,27 @@ enum ProductTag {
   FUR
   IRON
   CERAMIC
+}
+
+enum ProductMaterials {
+  STEEL
+  LEATHER
+  GLASS
+  THREADS
+}
+
+enum ProductColors {
+  RED
+  GREEN
+  YELLOW
+  PURPLE
+  BLACK
+  WHITE
+}
+
+enum ProductCategories {
+  PICTURE
+  SHOES
+  WALLET
+  CARPET
 }

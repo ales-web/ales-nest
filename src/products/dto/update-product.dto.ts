@@ -1,11 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProductTag } from '@prisma/client';
-import { IsArray, IsEnum, IsInt, IsString } from 'class-validator';
+import {
+  ProductCategories,
+  ProductColors,
+  ProductMaterials,
+  ProductTag,
+} from '@prisma/client';
+import { IsArray, IsEnum, IsInt, IsNumber, IsString } from 'class-validator';
 
 export class UpdateProductDto {
   @ApiProperty()
   @IsString()
   name: string;
+
+  @ApiProperty()
+  @IsNumber()
+  price: number;
 
   @ApiProperty()
   @IsString()
@@ -22,4 +31,24 @@ export class UpdateProductDto {
   @ApiProperty()
   @IsInt()
   shopId: number;
+
+  @ApiProperty({ enum: ProductMaterials, isArray: true })
+  @IsEnum(ProductMaterials, { each: true })
+  materials: ProductMaterials[];
+
+  @ApiProperty({ enum: ProductColors, isArray: true })
+  @IsEnum(ProductColors, { each: true })
+  colors: ProductColors[];
+
+  @ApiProperty()
+  @IsNumber()
+  size: number;
+
+  @ApiProperty({ enum: ProductCategories, isArray: true })
+  @IsEnum(ProductCategories, { each: true })
+  categories: ProductCategories[];
+
+  @ApiProperty()
+  @IsInt()
+  OnStock: number;
 }
