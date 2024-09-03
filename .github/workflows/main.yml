@@ -22,9 +22,42 @@ jobs:
   
       - name: Run Prisma migrations
         run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{secrets.DATABSE_URL}}
   
       - name: Generate Prisma client
         run: npx prisma generate
+        env:
+          DATABASE_URL: ${{secrets.DATABSE_URL}}
   
       - name: Restart PM2 process
         run: pm2 restart ales-nest
+        env:
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          S3_ACCESS_KEY: ${{secrets.S3_ACCESS_KEY}}
+          S3_BUCKET: ${{secrets.S3_BUCKET}}
+          S3_ENDPOINT: ${{secrets.S3_ENDPOINT}}
+          S3_SECRET_KEY: ${{secrets.S3_SECRET_KEY}}
+          JWT_EXP: ${{variables.JWT_EXP}}
+          PORT: ${{variables.PORT}}
+          S3_REGION: ${{variables.S3_REGION}}
+
+      - name: Stop current PM2 process by name
+        run: pm2 stop nestjs-app || true
+
+      - name: Start new PM2 process with name
+        run: pm2 start dist/src/main.js — name nestjs-app
+        env:
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          S3_ACCESS_KEY: ${{secrets.S3_ACCESS_KEY}}
+          S3_BUCKET: ${{secrets.S3_BUCKET}}
+          S3_ENDPOINT: ${{secrets.S3_ENDPOINT}}
+          S3_SECRET_KEY: ${{secrets.S3_SECRET_KEY}}
+          JWT_EXP: ${{variables.JWT_EXP}}
+          PORT: ${{variables.PORT}}
+          S3_REGION: ${{variables.S3_REGION}}
+
+      - name: Save PM2 process list
+        run: pm2 save
