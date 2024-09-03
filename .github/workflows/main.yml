@@ -23,12 +23,12 @@ jobs:
       - name: Run Prisma migrations
         run: npx prisma migrate deploy
         env:
-          DATABASE_URL: ${{secrets.DATABSE_URL}}
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
   
       - name: Generate Prisma client
         run: npx prisma generate
         env:
-          DATABASE_URL: ${{secrets.DATABSE_URL}}
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
 
       - name: Stop current PM2 process by name
         run: pm2 stop nestjs-app || true
