@@ -1,0 +1,30 @@
+name: build
+
+on: 
+  push:
+    branches: [master]
+
+
+jobs:
+  build:
+    runs-on: self-hosted
+      steps:
+        name: Check out the repository
+        uses: actions/checkout@v4
+        
+        name: install node
+        uses: actions/setup-node@v4
+        with: 
+          cache: npm
+  
+        name: install deps
+        run: npm i
+  
+        name: prisma migrate
+        run: npx prisma generate deploy
+  
+        name: prisma generate
+        run: npx prisma generate
+  
+        name: startup
+        run: pm2 restart ales-nest
