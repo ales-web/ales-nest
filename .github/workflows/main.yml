@@ -34,7 +34,7 @@ jobs:
         run: pm2 stop nestjs-app || true
 
       - name: Start new PM2 process with name
-        run: pm2 start dist/src/main.js — name nestjs-app
+        run: pm2 start "npm run start:prod" --name nestjs-app
         env:
           DATABASE_URL: ${{secrets.DATABASE_URL}}
           JWT_SECRET: ${{secrets.JWT_SECRET}}
