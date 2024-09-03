@@ -34,7 +34,7 @@ jobs:
         run: pm2 stop nestjs-app || true
 
       - name: Build app
-        run: npm build
+        run: npm run build
       
       - name: Start new PM2 process with name
         run: pm2 start "npm run start:prod" --name nestjs-app
