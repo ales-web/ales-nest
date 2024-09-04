@@ -39,7 +39,7 @@ jobs:
         run: npm run build
       
       - name: Start new PM2 process with name
-        run: pm2 start "npm run start:prod" — name ales-nest-gh
+        run: pm2 start "npm run start:prod" --name ales-nest-gh
         env:
           DATABASE_URL: ${{secrets.DATABASE_URL}}
           JWT_SECRET: ${{secrets.JWT_SECRET}}
