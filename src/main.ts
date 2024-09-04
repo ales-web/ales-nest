@@ -6,7 +6,7 @@ import * as fs from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    httpsOptions: {
+    httpsOptions: process.env.ENV === 'deploy' && {
       key: fs.readFileSync('/etc/letsencrypt/live/api.krylshop.ru/privkey.pem'),
       cert: fs.readFileSync('/etc/letsencrypt/live/api.krylshop.ru/cert.pem'),
     },
