@@ -2,9 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import * as fs from 'fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    httpsOptions: {
+      key: fs.readFileSync('/etc/letsencrypt/live/api.krylshop.ru/privkey.pem'),
+      cert: fs.readFileSync('/etc/letsencrypt/live/api.krylshop.ru/cert.pem'),
+    },
+  });
 
   const configService = app.get(ConfigService);
 
