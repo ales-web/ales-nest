@@ -44,11 +44,11 @@ export class UpdateProductDto {
   @IsNumber()
   size: number;
 
-  @ApiProperty({ enum: ProductCategories, isArray: true })
-  @IsEnum(ProductCategories, { each: true })
-  categories: ProductCategories[];
+  @ApiProperty({ enum: ProductCategories })
+  @IsEnum(ProductCategories)
+  category: ProductCategories;
 
   @ApiProperty()
   @IsInt()
-  OnStock: number;
+  inStock: number;
 }

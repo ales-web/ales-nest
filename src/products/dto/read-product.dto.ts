@@ -5,7 +5,19 @@ import {
   ProductMaterials,
   ProductTag,
 } from '@prisma/client';
-import { ReadShopDto } from 'src/shops/dto';
+class ReadShopProductDto {
+  @ApiProperty()
+  id: number;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  logo: string;
+
+  @ApiProperty()
+  rating: number;
+}
 
 export class ReadProductDto {
   @ApiProperty({ example: 1 })
@@ -26,9 +38,6 @@ export class ReadProductDto {
   @ApiProperty({ enum: ProductTag, isArray: true })
   tags: ProductTag[];
 
-  @ApiProperty()
-  shopId: number;
-
   @ApiProperty({ enum: ProductMaterials, isArray: true })
   materials: ProductMaterials[];
 
@@ -38,14 +47,17 @@ export class ReadProductDto {
   @ApiProperty()
   size: number;
 
-  @ApiProperty({ enum: ProductCategories, isArray: true })
-  categories: ProductCategories[];
+  @ApiProperty({ enum: ProductCategories })
+  category: ProductCategories;
 
   @ApiProperty()
-  OnStock: number;
+  inStock: number;
 
   @ApiProperty()
-  shop: ReadShopDto;
+  rating: number;
+
+  @ApiProperty()
+  shop: ReadShopProductDto;
 
   @ApiProperty()
   createdAt: Date;

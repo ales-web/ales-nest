@@ -10,87 +10,44 @@ export class ProductsService {
     private shopsService: ShopsService,
   ) {}
 
+  productSelect = {
+    id: true,
+    name: true,
+    price: true,
+    description: true,
+    images: true,
+    tags: true,
+    materials: true,
+    colors: true,
+    category: true,
+    size: true,
+    inStock: true,
+    createdAt: true,
+    updatedAt: true,
+    rating: true,
+    shop: {
+      select: {
+        id: true,
+        name: true,
+        logo: true,
+        rating: true,
+      },
+    },
+  };
+
   async createProduct(data: UpdateProductDto) {
     const shop = await this.shopsService.getShop(data.shopId);
     if (!shop) throw new NotFoundException();
     return await this.prismaService.product.create({
       data,
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        description: true,
-        images: true,
-        tags: true,
-        materials: true,
-        colors: true,
-        categories: true,
-        size: true,
-        OnStock: true,
-        createdAt: true,
-        updatedAt: true,
-        shopId: true,
-        shop: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            tags: true,
-            logo: true,
-            mainProductsLogo: true,
-            promo: true,
-            products: true,
-            owner: {
-              omit: {
-                password: true,
-              },
-            },
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-      },
+      select: this.productSelect,
     });
   }
 
   async getProduct(id: number) {
     const product = await this.prismaService.product.findUnique({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        description: true,
-        images: true,
-        tags: true,
-        materials: true,
-        colors: true,
-        categories: true,
-        size: true,
-        OnStock: true,
-        createdAt: true,
-        updatedAt: true,
-        shopId: true,
-        shop: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            tags: true,
-            logo: true,
-            mainProductsLogo: true,
-            promo: true,
-            products: true,
-            owner: {
-              omit: {
-                password: true,
-              },
-            },
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-      },
+      select: this.productSelect,
     });
     if (!product) throw new NotFoundException();
     return product;
@@ -98,41 +55,7 @@ export class ProductsService {
 
   async getProducts() {
     return await this.prismaService.product.findMany({
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        description: true,
-        images: true,
-        tags: true,
-        materials: true,
-        colors: true,
-        categories: true,
-        size: true,
-        OnStock: true,
-        createdAt: true,
-        updatedAt: true,
-        shopId: true,
-        shop: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            tags: true,
-            logo: true,
-            mainProductsLogo: true,
-            promo: true,
-            products: true,
-            owner: {
-              omit: {
-                password: true,
-              },
-            },
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-      },
+      select: this.productSelect,
     });
   }
 
@@ -142,41 +65,7 @@ export class ProductsService {
 
     return await this.prismaService.product.delete({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        description: true,
-        images: true,
-        tags: true,
-        materials: true,
-        colors: true,
-        categories: true,
-        size: true,
-        OnStock: true,
-        createdAt: true,
-        updatedAt: true,
-        shopId: true,
-        shop: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            tags: true,
-            logo: true,
-            mainProductsLogo: true,
-            promo: true,
-            products: true,
-            owner: {
-              omit: {
-                password: true,
-              },
-            },
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-      },
+      select: this.productSelect,
     });
   }
 
@@ -187,82 +76,14 @@ export class ProductsService {
     return await this.prismaService.product.update({
       where: { id },
       data,
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        description: true,
-        images: true,
-        tags: true,
-        materials: true,
-        colors: true,
-        categories: true,
-        size: true,
-        OnStock: true,
-        createdAt: true,
-        updatedAt: true,
-        shopId: true,
-        shop: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            tags: true,
-            logo: true,
-            mainProductsLogo: true,
-            promo: true,
-            products: true,
-            owner: {
-              omit: {
-                password: true,
-              },
-            },
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-      },
+      select: this.productSelect,
     });
   }
 
   async getShopProducts(id: number) {
     return await this.prismaService.product.findMany({
       where: { shopId: id },
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        description: true,
-        images: true,
-        tags: true,
-        materials: true,
-        colors: true,
-        categories: true,
-        size: true,
-        OnStock: true,
-        createdAt: true,
-        updatedAt: true,
-        shopId: true,
-        shop: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            tags: true,
-            logo: true,
-            mainProductsLogo: true,
-            promo: true,
-            products: true,
-            owner: {
-              omit: {
-                password: true,
-              },
-            },
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-      },
+      select: this.productSelect,
     });
   }
 }
