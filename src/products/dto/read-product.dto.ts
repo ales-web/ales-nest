@@ -54,9 +54,6 @@ export class ReadProductDto {
   inStock: number;
 
   @ApiProperty()
-  rating: number;
-
-  @ApiProperty()
   shop: ReadShopProductDto;
 
   @ApiProperty()

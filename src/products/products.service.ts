@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { UpdateProductDto } from './dto';
 import { ShopsService } from 'src/shops/shops.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProductsService {
@@ -10,7 +11,7 @@ export class ProductsService {
     private shopsService: ShopsService,
   ) {}
 
-  productSelect = {
+  productSelect: Prisma.ProductSelect = {
     id: true,
     name: true,
     price: true,
@@ -24,7 +25,6 @@ export class ProductsService {
     inStock: true,
     createdAt: true,
     updatedAt: true,
-    rating: true,
     shop: {
       select: {
         id: true,
