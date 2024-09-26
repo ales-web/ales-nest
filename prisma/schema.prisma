@@ -21,14 +21,24 @@ enum Role {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  shops     Shop[]
-  avatar    String?
-  role      Role     @default(USER)
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  password    String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  shops       Shop[]
+  role        Role     @default(USER)
+  avatar      String?
+  firstName   String?  @map("first_name")
+  lastName    String?  @map("last_name")
+  description String?
+  phone       String?
+  youtube     String?
+  instagram   String?
+  telegram    String?
+  whatsapp    String?
+  viber       String?
+  facebook    String?
 
   @@map("users")
 }

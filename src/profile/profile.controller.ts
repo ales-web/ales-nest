@@ -18,7 +18,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { ReadProfileDto, UpdateProfileDto } from './dto';
+import { UpdateProfileDto } from './dto';
+import { ProfileEntity } from './entities';
 
 @ApiTags('Profile')
 @ApiBearerAuth()
@@ -28,11 +29,11 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @ApiOperation({ summary: 'Get profile' })
-  @ApiOkResponse({ type: ReadProfileDto })
+  @ApiOkResponse({ type: ProfileEntity })
   @ApiNotFoundResponse({ description: 'Profile not found' })
   @UsePipes(ValidationPipe)
   @Get()
-  async getProfile(@Req() request: Request): Promise<ReadProfileDto> {
+  async getProfile(@Req() request: Request): Promise<ProfileEntity> {
     const userId = request['userId'];
     const profile = await this.profileService.getProfile(userId);
     if (!profile) throw new NotFoundException();
@@ -40,14 +41,14 @@ export class ProfileController {
   }
 
   @ApiOperation({ summary: 'Update profile' })
-  @ApiOkResponse({ type: ReadProfileDto })
+  @ApiOkResponse({ type: ProfileEntity })
   @ApiNotFoundResponse({ description: 'Profile not found' })
   @UsePipes(ValidationPipe)
   @Put()
   async updateProfile(
     @Req() request: Request,
     @Body() data: UpdateProfileDto,
-  ): Promise<ReadProfileDto> {
+  ): Promise<ProfileEntity> {
     const userId = request['userId'];
     const profile = await this.profileService.getProfile(userId);
     if (!profile) throw new NotFoundException();

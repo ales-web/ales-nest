@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { ReadUserDto } from './dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -13,10 +14,10 @@ export class UsersService {
     });
   }
 
-  async findOneById(id: number): Promise<ReadUserDto> {
+  async findOneById(id: number, params?: Partial<Prisma.UserFindFirstArgs>) {
     return await this.prismaService.user.findFirst({
       where: { id },
-      omit: { password: true },
+      ...params,
     });
   }
 
@@ -32,10 +33,19 @@ export class UsersService {
     });
   }
 
-  async update(id: number, data: UpdateUserDto): Promise<ReadUserDto> {
+  async update<T>(id: number, data: T, params: Partial<Prisma.UserUpdateArgs>) {
     return await this.prismaService.user.update({
       where: { id },
       data,
+      ...params,
     });
   }
 }
+
+// select: {
+//   id: true,
+//   email: true,
+//   createdAt: true,
+//   updatedAt: true,
+//   shops: true,
+// },
