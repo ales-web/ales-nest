@@ -16,7 +16,8 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { RefreshDto, RegisterDto, SessionDto } from './dto';
+import { LoginDto, RefreshDto, RegisterDto } from './dto';
+import { SessionEntity } from './entities';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -24,39 +25,39 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Register new user' })
   @ApiCreatedResponse({
-    type: SessionDto,
+    type: SessionEntity,
     description: 'Registred successful',
   })
   @ApiConflictResponse({ description: 'User already exists' })
   @UsePipes(ValidationPipe)
   @Post('register')
-  register(@Body() dto: RegisterDto): Promise<SessionDto> {
+  register(@Body() dto: RegisterDto): Promise<SessionEntity> {
     return this.authService.register(dto);
   }
 
   @ApiOperation({ summary: 'Login existing user' })
   @ApiOkResponse({
-    type: SessionDto,
+    type: SessionEntity,
     description: 'Login successful',
   })
   @ApiNotFoundResponse({ description: 'User not found' })
   @UsePipes(ValidationPipe)
   @HttpCode(200)
   @Post('login')
-  login(@Body() dto: RegisterDto): Promise<SessionDto> {
+  login(@Body() dto: LoginDto): Promise<SessionEntity> {
     return this.authService.logIn(dto.email, dto.password);
   }
 
   @ApiOperation({ summary: 'Get new token' })
   @ApiOkResponse({
-    type: SessionDto,
+    type: SessionEntity,
     description: 'Refresh successful',
   })
   @ApiUnauthorizedResponse({ description: 'Invalid token' })
   @UsePipes(ValidationPipe)
   @HttpCode(200)
   @Post('refresh')
-  refresh(@Body() token: RefreshDto): Promise<SessionDto> {
+  refresh(@Body() token: RefreshDto): Promise<SessionEntity> {
     return this.authService.refresh(token.refreshToken);
   }
 }

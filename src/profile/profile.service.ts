@@ -1,29 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { UpdateProfileDto } from './dto';
+import { ProfileEntity } from './entities';
 
 @Injectable()
 export class ProfileService {
   constructor(private userService: UsersService) {}
 
   private readonly args = {
-    select: {
-      id: true,
-      email: true,
-      createdAt: true,
-      updatedAt: true,
-      role: true,
-      avatar: true,
-      firstName: true,
-      lastName: true,
-      description: true,
-      phone: true,
-      youtube: true,
-      facebook: true,
-      instagram: true,
-      telegram: true,
-      whatsapp: true,
-      viber: true,
+    include: {
       shops: {
         select: {
           id: true,
@@ -35,15 +20,14 @@ export class ProfileService {
     },
   };
 
-  async getProfile(id: number) {
+  async getProfile(id: number): Promise<ProfileEntity> {
     return await this.userService.findOneById(id, this.args);
   }
 
-  async updateProfile(userId: number, data) {
-    return await this.userService.update<UpdateProfileDto>(
-      userId,
-      data,
-      this.args,
-    );
+  async updateProfile(
+    userId: number,
+    data: UpdateProfileDto,
+  ): Promise<ProfileEntity> {
+    return await this.userService.update(userId, data, this.args);
   }
 }

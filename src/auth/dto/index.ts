@@ -1,3 +1,3 @@
 export * from './refresh.dto';
 export * from './register.dto';
-export * from './session.dto';
+export * from './login.dto';

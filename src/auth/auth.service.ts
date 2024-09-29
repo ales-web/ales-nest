@@ -6,9 +6,10 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import { RegisterDto, SessionDto } from './dto';
+import { RegisterDto } from './dto';
 import { hash, verify } from 'argon2';
 import { ProfileService } from 'src/profile/profile.service';
+import { SessionEntity } from './entities';
 @Injectable()
 export class AuthService {
   constructor(
@@ -17,7 +18,7 @@ export class AuthService {
     private profileService: ProfileService,
   ) {}
 
-  async register(user: RegisterDto): Promise<SessionDto> {
+  async register(user: RegisterDto): Promise<SessionEntity> {
     const existingUser = await this.userService.findOneByEmail(user.email);
 
     if (existingUser) throw new ConflictException('User already exists');
@@ -29,7 +30,7 @@ export class AuthService {
     return { ...(await this.issueNewTokens({ userId: newUser.id })), profile };
   }
 
-  async logIn(email: string, password: string): Promise<SessionDto> {
+  async logIn(email: string, password: string): Promise<SessionEntity> {
     const user = await this.userService.findOneByEmail(email);
     if (!user) {
       throw new NotFoundException();
@@ -47,7 +48,7 @@ export class AuthService {
     };
   }
 
-  async refresh(token: string): Promise<SessionDto> {
+  async refresh(token: string): Promise<SessionEntity> {
     try {
       const isValid = await this.jwtService.verifyAsync(token);
       const tokenData = await this.jwtService.decode(token);
